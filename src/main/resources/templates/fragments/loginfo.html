@@ -1,0 +1,39 @@
+<div class="navbar-item" th:object="${session}">
+  <a th:if="*{user == null}" class="button is-primary is-rounded" href="/login" th:href="@{/login}">
+    Login
+  </a>
+  <div th:unless="*{user==null}" class="dropdown is-hoverable">
+    <div class="dropdown-trigger">
+      <div class="field has-addons">
+        <div class="control">
+          <button class="button" aria-haspopup="true" aria-controls="dropdown-menu2">
+            <span class="icon is-small">
+              <i class="fas fa-user" aria-hidden="true"></i>
+            </span>
+            <span th:text="*{user.name}"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="dropdown-menu" id="dropdown-menu2" role="menu">
+      <div class="dropdown-content">
+          <a href="#" class="dropdown-item" th:href="@{/user/details/feed}">
+            Profile
+          </a>
+          <hr class="dropdown-divider">
+          <a th:if="*{user.isAdmin()}" th:href="@{/administration}" class="dropdown-item">
+            Administrate
+          </a>
+          <hr th:if="*{user.isAdmin()}" class="dropdown-divider">
+          <a href="/logout" th:href="@{/logout}" class="dropdown-item has-text-danger">
+           <span class="icon-text">
+             <span class="icon">
+                <i class="fas fa-right-from-bracket"></i>
+             </span>
+             <span>Logout</span>
+           </span>
+          </a>
+      </div>
+    </div>
+  </div>
+</div>

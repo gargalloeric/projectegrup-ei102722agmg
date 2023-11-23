@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/base}">
+<head>
+    <title>Update SDG</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+</head>
+<body>
+    <section class="section" layout:fragment="content">
+        <nav class="breadcrumb" aria-label="breadcrumbs">
+            <ul>
+                <li><a th:href="@{/}" href="#">Home</a></li>
+                <li><a th:href="@{/sdg/list}" href="#">SDGs</a></li>
+                <li><a th:href="@{/sdg/update/{id}(id=${sdg.idSdg})}" href="#">Update</a></li>
+            </ul>
+        </nav>
+        <div class="container">
+            <h1 class="title">Update SDG</h1>
+            <form action="#" th:action="@{/sdg/update}"
+                  th:object="${sdg}" method="post">
+                <div class="field">
+                    <div class="control">
+                        <input type="number" th:field="*{idSdg}" hidden />
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Number</label>
+                    <div class="control">
+                        <input class="input" type="number" th:field="*{number}" />
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Name</label>
+                    <div class="control">
+                        <input class="input" type="text" th:field="*{name}" />
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label">Relevance</label>
+                    <div class="control">
+                        <div class="select">
+                            <select th:field="*{relevance}">
+                                <option th:each="relevanceType : ${relevanceTypes}"
+                                        th:value="${relevanceType}"
+                                        th:text="${relevanceType}">
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="control">
+                        <button class="button is-success is-rounded">Update SDG</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+</body>
+</html>

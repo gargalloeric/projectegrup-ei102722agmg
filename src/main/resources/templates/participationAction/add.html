@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/base}">
+<head>
+    <title>Add new ParticipationAction</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+</head>
+<body>
+<section class="section" layout:fragment="content">
+    <div class="container">
+        <h1 class="title">Nuevo ParticipationAction</h1>
+        <form action="#" th:action="@{/participationAction/add}"
+              th:object="${participationAction}" method="post">
+            <div class="field">
+                <label class="label">Start Date</label>
+                <div class="control">
+                    <input class="input" type="date" th:field="*{startDate}" />
+                </div>
+            </div>
+            <div class="field">
+                <label class="label">End Date</label>
+                <div class="control">
+                    <input class="input" type="date" th:field="*{endDate}" />
+                </div>
+            </div>
+            <div class="field">
+                <label class="label">Status</label>
+                <div class="control">
+                    <div class="select">
+                        <select th:field="*{status}">
+                            <option th:each="statusType : ${statusTypes}"
+                                    th:value="${statusType}"
+                                    th:text="${statusType}">
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="field">
+                <div class="control">
+                    <button class="button is-primary">Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+</body>
+</html>

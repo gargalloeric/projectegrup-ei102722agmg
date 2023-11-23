@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/base}">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+</head>
+<body>
+<section class="section" layout:fragment="content">
+    <div class="container">
+        <form action="#" th:action="@{/login}"
+              th:object="${user}" method="post">
+            <div class="field">
+                <label class="label">Email</label>
+                <div class="control has-icons-left">
+                    <input th:class="${#fields.hasErrors('email')} ? 'input is-danger' : 'input'" type="email" th:field="*{email}" placeholder="example@gmail.com" />
+                    <span class="icon is-small is-left">
+                        <i class="fas fa-envelope"></i>
+                    </span>
+                </div>
+                <p class="help is-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
+            </div>
+            <div class="field">
+                <label class="label">Password</label>
+                <div class="control has-icons-left">
+                    <input th:class="${#fields.hasErrors('password')} ? 'input is-danger' : 'input'" type="password" th:field="*{password}" placeholder="password"/>
+                    <span class="icon is-small is-left">
+                        <i class="fas fa-lock"></i>
+                    </span>
+                </div>
+                <p class="help is-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
+            </div>
+            <div class="field">
+                <div class="control">
+                    <button class="button is-success is-rounded">Sign In</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+</body>
+</html>

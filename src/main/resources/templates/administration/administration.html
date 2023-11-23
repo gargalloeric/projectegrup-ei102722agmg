@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/base}">
+<head>
+    <meta charset="UTF-8">
+    <title>Administration</title>
+</head>
+<body>
+<section class="section" layout:fragment="content">
+    <nav class="breadcrumb" aria-label="breadcrumbs">
+        <ul>
+            <li><a th:href="@{/}" href="#">Home</a></li>
+            <li><a th:href="@{/administration}" href="#">Administration</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <article class="panel is-link">
+            <p class="panel-heading">
+                Filters
+            </p>
+            <div class="panel-block">
+                <form th:action="@{/administration/filter}"
+
+                      th:object="${filters}" method="get">
+                    <div class="field is-grouped">
+                        <div class="control">
+                            <label class="checkbox">
+                                <input type="checkbox" th:field="*{pending}">
+                                Pending
+                            </label>
+                        </div>
+                        <div class="control">
+                            <label class="checkbox">
+                                <input type="checkbox" th:field="*{active}">
+                                Active
+                            </label>
+                        </div>
+                        <div class="control">
+                            <label class="checkbox">
+                                <input type="checkbox" th:field="*{rejected}">
+                                Rejected
+                            </label>
+                        </div>
+                        <div class="control">
+                            <label class="checkbox">
+                                <input type="checkbox" th:field="*{suspended}">
+                                Suspended
+                            </label>
+                        </div>
+                        <div class="control">
+                            <label class="checkbox">
+                                <input type="checkbox" th:field="*{finished}">
+                                Finished
+                            </label>
+                        </div>
+                    </div>
+                    <div class="field is-grouped">
+                        <div class="control">
+                            <button class="button is-success is-rounded">
+                            <span class="icon is-small">
+                                <i class="fas fa-filter"></i>
+                            </span>
+                                <span>Filter</span>
+                            </button>
+                        </div>
+                        <div class="control">
+                            <a class="button is-info is-rounded" th:href="@{/administration}">
+                            <span class="icon is-small">
+                                <i class="fas fa-broom"></i>
+                            </span>
+                                <span>Clear filter</span>
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </article>
+    </div>
+    <div class="container mt-5">
+        <h2 class="subtitle has-text-weight-bold">Initiatives</h2>
+        <article class="message is-success" th:if="${success}">
+            <div class="message-body" th:text="${success}"></div>
+        </article>
+        <table class="table is-hoverable is-fullwidth">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Status</th>
+                <th>Last Modified</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="initiative: ${initiatives}">
+                <td th:text="${initiative.name}"></td>
+                <td th:text="${initiative.status}"></td>
+                <td th:text="${{initiative.lastModified}}"></td>
+                <td>
+                    <div class="field is-grouped">
+                        <div class="control">
+                            <a class="button is-link is-light is-rounded"
+
+                               th:href="@{/initiative/details/{id}/actions(id=${initiative.getIdInitiative()})}">
+                        <span class="icon is-small">
+                            <i class="fas fa-eye"></i>
+                        </span>
+                                <span>View</span>
+                            </a>
+                        </div>
+                        <div class="control">
+                            <a th:if="${initiative.status.name() == 'PENDING'}" class="button is-warning is-light is-rounded"
+
+                               th:href="@{/initiative/reject/{id}(id=${initiative.getIdInitiative()})}">
+                        <span class="icon is-small">
+                            <i class="fas fa-x"></i>
+                        </span>
+                                <span>Reject</span>
+                            </a>
+                        </div>
+                        <div class="control">
+                            <a th:if="${initiative.status.name() == 'PENDING'}" class="button is-success is-light is-rounded"
+
+                               th:href="@{/initiative/approve/{id}(id=${initiative.getIdInitiative()})}">
+                        <span class="icon is-small">
+                            <i class="fas fa-check"></i>
+                        </span>
+                                <span>Approve</span>
+                            </a>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+</body>
+</html>

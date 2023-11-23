@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/base}">
+<head>
+    <title>Add new Subscription</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+</head>
+<body>
+<section class="section" layout:fragment="content">
+    <nav class="breadcrumb" aria-label="breadcrumbs">
+        <ul>
+            <li><a th:href="@{/}" href="#">Home</a></li>
+            <li><a th:href="@{/user/details/feed}" href="#">Profile</a></li>
+            <li><a th:href="@{/user/details/subscriptions}" href="#">Subscriptions</a></li>
+            <li><a th:href="@{/subscription/add}" href="#">Create</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <h1 class="title">Nuevo Subscription</h1>
+        <form action="#" th:action="@{/subscription/add}"
+              th:object="${subscription}" method="post">
+            <div class="field">
+                <label class="label">SDG</label>
+                <div class="control">
+                    <div th:class="${#fields.hasErrors('idSdg')} ? 'select is-danger' : 'select'">
+                        <select th:field="*{idSdg}">
+                            <option th:each="sdg : ${sdgs}"
+                                    th:value="${sdg.idSdg}"
+                                    th:text="${sdg.name}">
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="field">
+                <div class="control">
+                    <input type="date" th:field="*{startDate}" hidden/>
+                </div>
+            </div>
+            <div class="field">
+                <div class="control">
+                    <input type="date" th:field="*{endDate}" hidden/>
+                </div>
+            </div>
+            <div class="field">
+                <div class="control">
+                    <input type="number" th:field="*{idUjiParticipant}" hidden />
+                </div>
+            </div>
+            <div class="field">
+                <div class="control">
+                    <button class="button is-success is-rounded">Subscribe</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+</body>
+</html>

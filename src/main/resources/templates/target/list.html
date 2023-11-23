@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/base}">
+<head>
+    <title>Targets</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+</head>
+<body>
+<section class="section" layout:fragment="content">
+    <nav class="breadcrumb" aria-label="breadcrumbs">
+        <ul>
+            <li><a th:href="@{/}" href="#">Home</a></li>
+            <li><a th:href="@{/target/list}" href="#">Targets</a></li>
+        </ul>
+    </nav>
+    <article class="message is-success" th:if="${success}">
+        <div class="message-body" th:text="${success}"></div>
+    </article>
+    <div class="container" th:if="*{targets.isEmpty()}">
+        <div class="has-text-centered">
+            <img src="/images/error_try_again.svg" width="400">
+        </div>
+        <h1 class="subtitle is-2 has-text-centered">Upss!! No targets yet.</h1>
+        <div class="buttons is-centered">
+            <a class="button is-success is-rounded" href="add" th:href="@{/target/add}">
+                    <span class="icon is-small">
+                        <i class="fas fa-plus"></i>
+                    </span>
+                <span>Add Target</span>
+            </a>
+        </div>
+    </div>
+    <div class="container" th:unless="*{targets.isEmpty()}">
+        <h1 class="title">Targets List</h1>
+        <table class="table is-hoverable is-fullwidth">
+            <thead>
+            <tr>
+                <th>Number</th>
+                <th>Description</th>
+                <th>Relevance</th>
+                <th th:if="${isAdmin}">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="target: ${targets}">
+                <td th:text="${target.number}"></td>
+                <td th:text="${target.description}"></td>
+                <td th:text="${target.relevance}"></td>
+                <td th:if="${isAdmin}">
+                    <div class="field is-grouped">
+                        <div class="controll">
+                            <a class="button is-rounded is-link" th:href="@{/target/update/{id}(id=${target.getIdTarget()})}">
+                                <span class="icon is-small">
+                                  <i class="fas fa-pen-to-square"></i>
+                                </span>
+                                <span>Update</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="control">
+                        <a class="button is-rounded is-warning" th:href="@{/target/delete/{id}(id=${target.getIdTarget()})}">
+                            <span class="icon is-small">
+                                <i class="fas fa-trash"></i>
+                            </span>
+                            <span>Remove</span>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <a class="button is-success is-rounded" href="add" th:href="@{/target/add}">
+                <span class="icon is-small">
+                    <i class="fas fa-plus"></i>
+                </span>
+            <span>Add Target</span>
+        </a>
+    </div>
+</section>
+</body>
+</html>

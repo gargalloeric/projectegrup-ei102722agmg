@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/base}">
+<head>
+    <meta charset="UTF-8">
+    <title>Error</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="container">
+        <article class="message mt-4" th:classappend="${#strings.equals(errorName, 'restrictedAccess')} ? 'is-danger' : 'is-warning'">
+            <div class="message-header">
+                <p th:text="${#strings.equals(errorName, 'danger')} ? 'Danger' : 'Warning'"></p>
+            </div>
+            <div class="message-body" th:text="${message}">
+            </div>
+        </article>
+        <div th:align="center">
+            <a href="/" class="button is-rounded" th:align="left">
+                <span class="icon is-small">
+                    <i class="fas fa-home"></i>
+                </span>
+                <sapn>Home</sapn>
+            </a>
+        </div>
+    </div>
+</section>
+</body>
+</html>

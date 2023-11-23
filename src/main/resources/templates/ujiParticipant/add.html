@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/base}">
+<head>
+    <title>Add new UjiParticipant</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+</head>
+<body>
+<section class="section" layout:fragment="content">
+    <div class="container">
+        <h1 class="title">Nuevo UjiParticipant</h1>
+        <form action="#" th:action="@{/ujiParticipant/add}"
+              th:object="${ujiParticipant}" method="post">
+            <div class="field">
+                <label class="label">Name</label>
+                <div class="control">
+                    <input class="input" type="text" th:field="*{name}" />
+                </div>
+            </div>
+            <div class="field">
+                <label class="label">Type</label>
+                <div class="control">
+                    <div class="select">
+                        <select th:field="*{type}">
+                            <option th:each="ujiType : ${ujiTypes}"
+                                    th:value="${ujiType}"
+                                    th:text="${ujiType}">
+                            </option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="field">
+                <label class="label">Email</label>
+                <div class="control">
+                    <input class="input" type="text" th:field="*{emailAddress}" />
+                </div>
+            </div>
+            <div class="field">
+                <label class="label">PhoneNumber</label>
+                <div class="control">
+                    <input class="input" type="text" th:field="*{phoneNumber}" />
+                </div>
+            </div>
+            <div class="field">
+                <div class="control">
+                    <button class="button is-primary">Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/base}">
+<head>
+    <title>Add new Action</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+</head>
+<body>
+<section class="section" layout:fragment="content">
+    <nav class="breadcrumb" aria-label="breadcrumbs">
+        <ul>
+            <li><a th:href="@{/}" href="#">Home</a></li>
+            <li><a th:href="@{/initiative/details/{id}/actions(id=${idInitiative})}" href="#">Action</a></li>
+            <li><a th:href="@{/action/update/{id}(id=${idAction})}" href="#">Update</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <h1 class="title">Update Action</h1>
+        <form action="#" th:action="@{/action/update}"
+              th:object="${action}" method="post">
+            <div class="field">
+                <label class="label">Name</label>
+                <div class="control">
+                    <input th:class="${#fields.hasErrors('name')} ? 'input is-danger' : 'input'" type="text" th:field="*{name}" />
+                </div>
+                <p class="help is-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
+            </div>
+            <div class="field">
+                <label class="label">Start Date</label>
+                <div class="control">
+                    <input th:class="${#fields.hasErrors('startDate')} ? 'input is-danger' : 'input'" type="date" th:field="*{startDate}" />
+                </div>
+                <p class="help is-danger" th:if="${#fields.hasErrors('startDate')}" th:errors="*{startDate}"></p>
+            </div>
+            <div class="field">
+                <label class="label">End Date</label>
+                <div class="control">
+                    <input th:class="${#fields.hasErrors('endDate')} ? 'input is-danger' : 'input'" type="date" th:field="*{endDate}" />
+                </div>
+                <p class="help is-danger" th:if="${#fields.hasErrors('endDate')}" th:errors="*{endDate}"></p>
+            </div>
+            <div class="field">
+                <label class="label">Progress</label>
+                <div class="control">
+                    <div th:class="${#fields.hasErrors('progress')} ? 'select is-danger' : 'select'">
+                        <select th:field="*{progress}">
+                            <option th:each="progressType : ${progressTypes}"
+                                    th:value="${progressType.name()}"
+                                    th:text="${progressType.name()}">
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <p class="help is-danger" th:if="${#fields.hasErrors('progress')}" th:errors="*{progress}"></p>
+            </div>
+            <div class="field">
+                <label class="label">Target</label>
+                <div class="control">
+                    <div th:class="${#fields.hasErrors('idTarget')} ? 'select is-danger' : 'select'">
+                        <select th:field="*{idTarget}">
+                            <option th:each="target : ${targets}"
+                                    th:value="${target.idTarget}"
+                                    th:text="${target.description}">
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <p class="help is-danger" th:if="${#fields.hasErrors('idTarget')}" th:errors="*{idTarget}"></p>
+            </div>
+            <div class="field">
+                <label class="label">Description</label>
+                <div class="control">
+                    <textarea th:class="${#fields.hasErrors('description')} ? 'textarea is-danger' : 'textarea'" th:field="*{description}"></textarea>
+                </div>
+                <p class="help is-danger" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></p>
+            </div>
+            <div class="field">
+                <div class="control">
+                    <input type="date" th:field="*{lastModified}" hidden />
+                </div>
+            </div>
+            <div class="field">
+                <div class="control">
+                    <input type="number" th:field="*{idInitiative}" hidden />
+                </div>
+            </div>
+            <div class="field">
+                <div class="control">
+                    <input type="number" th:field="*{idAction}" hidden />
+                </div>
+            </div>
+            <div class="field">
+                <div class="control">
+                    <button class="button is-success is-rounded">Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+</body>
+</html>

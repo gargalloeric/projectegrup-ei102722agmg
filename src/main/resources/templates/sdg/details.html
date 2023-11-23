@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/base}">
+<head>
+    <meta charset="UTF-8">
+    <title>Details</title>
+</head>
+<body>
+  <section class="section" layout:fragment="content">
+      <nav class="breadcrumb" aria-label="breadcrumbs">
+          <ul>
+              <li><a th:href="@{/}" href="#">Home</a></li>
+              <li><a th:href="@{/sdg/list}" href="#">SDGs</a></li>
+              <li><a th:href="@{/sdg/details/{id}(id=${idSdg})}" href="#">Details</a></li>
+          </ul>
+      </nav>
+      <h1 class="title">SDG Details</h1>
+      <div class="container">
+        <h2 class="subtitle" th:text="${sdg.name}"></h2>
+        <h2 class="subtitle">Number: <span th:text="${sdg.number}"></span></h2>
+        <h2 class="subtitle">Relevance: <span th:text="${sdg.relevance}"></span></h2>
+        <h2 class="subtitle">Associated Targets</h2>
+        <table class="table is-hoverable is-fullwidth">
+              <thead>
+              <tr>
+                  <th>Number</th>
+                  <th>Description</th>
+                  <th>Relevance</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr th:each="target: ${targets}">
+                  <td th:text="${target.number}"></td>
+                  <td th:text="${target.description}"></td>
+                  <td th:text="${target.relevance}"></td>
+              </tr>
+              </tbody>
+          </table>
+      </div>
+  </section>
+</body>
+</html>

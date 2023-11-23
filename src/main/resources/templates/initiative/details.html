@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/base}">
+<head>
+    <meta charset="UTF-8">
+    <title>Details</title>
+</head>
+<body>
+    <section class="section" layout:fragment="content">
+        <nav class="breadcrumb" aria-label="breadcrumbs">
+            <ul>
+                <li><a th:href="@{/}" href="#">Home</a></li>
+                <li><a th:href="@{/initiative/list}" href="#">Initiatives</a></li>
+                <li><a th:href="@{/initiative/details/{id}/actions(id=${initiative.idInitiative})}" href="#">Details</a></li>
+            </ul>
+        </nav>
+        <div class="container">
+            <h1 class="title is-1 is-spaced" th:text="${initiative.name}"></h1>
+            <article class="message is-success" th:if="${success_update}">
+                <div class="message-body" th:text="${success_update}"></div>
+            </article>
+            <div class="columns">
+                <div class="column is-three-quarters">
+                    <h2 class="subtitle has-text-weight-bold">Description</h2>
+                    <div class="content has-text-justified" th:text="${initiative.description}"></div>
+                </div>
+                <div class="column">
+                    <div class="container">
+                        <h2 class="subtitle has-text-weight-bold">Details</h2>
+                        <div class="content">
+                            <p>
+                                <span class="has-text-weight-semibold">Start Date:</span>
+                                <span th:text="${{initiative.startDate}}"></span>
+                            </p>
+                            <p>
+                                <span class="has-text-weight-semibold">End Date:</span>
+                                <span th:text="${{initiative.endDate}}"></span>
+                            </p>
+                            <p>
+                                <span class="has-text-weight-semibold">Last Modified:</span>
+                                <span th:text="${{initiative.lastModified}}"></span>
+                            </p>
+                            <p>
+                                <span class="has-text-weight-semibold">Responsible:</span>
+                                <span th:text="${initiative.idUjiParticipant}"></span>
+                            </p>
+                            <p>
+                                <span class="has-text-weight-semibold">Status:</span>
+                                <span th:text="${initiative.status}"></span>
+                            </p>
+                            <p>
+                                <span class="has-text-weight-semibold">Objective:</span>
+                                <span th:text="${initiative.classification}"></span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="container mt-2" th:if="*{isResponsible}">
+                        <h2 class="subtitle has-text-weight-bold">Actions</h2>
+                        <div class="buttons">
+                            <a class="button is-info is-rounded is-fullwidth" th:href="@{/initiative/update/{id}(id = ${initiative.getIdInitiative()})}">
+                                    <span class="icon is-small">
+                                        <i class="fas fa-pen-to-square"></i>
+                                    </span>
+                                <span>Update</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="container mt-2" th:if="*{canRequest}">
+                        <h2 class="subtitle has-text-weight-bold">Actions</h2>
+                        <div class="buttons">
+                            <a class="button is-info is-rounded is-fullwidth" th:href="@{/participation-initiative/request/{id}(id=${initiative.idInitiative})}">
+                                    <span class="icon is-small">
+                                        <i class="fas fa-file-contract"></i>
+                                    </span>
+                                <span>Request Participation</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <hr />
+            <div class="tabs is-toggle">
+                <ul>
+                    <li th:class="${isActions} ? 'is-active' : ''">
+                        <a th:href="@{/initiative/details/{id}/actions(id=${initiative.idInitiative})}">
+                            <span class="icon is-small"><i class="fas fa-bolt-lightning" aria-hidden="true"></i></span>
+                            <span>Actions</span>
+                        </a>
+                    </li>
+                    <li th:class="${isParticipants} ? 'is-active' : ''">
+                        <a th:href="@{/initiative/details/{id}/participants(id=${initiative.idInitiative})}">
+                            <span class="icon is-small"><i class="fas fa-users" aria-hidden="true"></i></span>
+                            <span>Participants</span>
+                        </a>
+                    </li>
+                    <li th:class="${isRequests} ? 'is-active' : ''" th:if="${isResponsible}">
+                        <a th:href="@{/initiative/details/{id}/requests(id=${initiative.idInitiative})}">
+                            <span class="icon is-small"><i class="fas fa-file-contract" aria-hidden="true"></i></span>
+                            <span>Participation Requests</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <article class="message is-success" th:if="${success}">
+                <div class="message-body" th:text="${success}"></div>
+            </article>
+            <article class="message is-warning" th:if="${warning}">
+                <div class="message-body" th:text="${warning}"></div>
+            </article>
+            <div th:if="*{isActions}">
+                <h2 class="subtitle has-text-weight-bold">Associated Actions</h2>
+                <table th:unless="${initiativeActions.isEmpty()}" class="table is-hoverable is-fullwidth">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Progress</th>
+                        <th th:if="${isResponsible}">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="action : ${initiativeActions}">
+                        <td th:text="${action.name}"></td>
+                        <td th:text="${action.startDate}"></td>
+                        <td th:text="${action.endDate}"></td>
+                        <td th:text="${action.progress}"></td>
+                        <td th:if="${isResponsible}">
+                            <a class="button is-rounded is-link" th:href="@{/action/update/{idAction}(idAction=${action.idAction})}">
+                                <span class="icon is-small">
+                                  <i class="fas fa-pen-to-square"></i>
+                                </span>
+                                <span>Update</span>
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <h2 th:if="${initiativeActions.isEmpty()}" class="subtitle has-text-centered">No associated actions</h2>
+                <div class="has-text-centered" th:if="*{isResponsible}">
+                    <a th:href="@{/action/add/{idInitiative}(idInitiative=${initiative.idInitiative})}" class="button is-success is-rounded" type="submit">
+                    <span class="icon is-small">
+                        <i class="fas fa-plus"></i>
+                    </span>
+                        <span>Add Action</span>
+                    </a>
+                </div>
+            </div>
+            <div th:if="*{isParticipants}">
+                <h2 class="subtitle has-text-weight-bold">Initiative Participants</h2>
+                <table th:unless="${participants.isEmpty()}" class="table is-hoverable is-fullwidth">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Status</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th th:if="${isResponsible}">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="participant : ${participants}">
+                        <td th:text="${participant.name}"></td>
+                        <td th:text="${participant.type}"></td>
+                        <td th:text="${participant.status}"></td>
+                        <td th:text="${{participant.startDate}}"></td>
+                        <td th:if="${participant.endDate == null}">-----------</td>
+                        <td th:text="${{participant.endDate}}" th:unless="${participant.endDate == null}"></td>
+                        <td th:if="${isResponsible}">
+                            <a th:if="${participant.endDate == null}" class="button is-rounded is-warning" th:href="@{/participation-initiative/end/{idInitiative}/{idParticipant}(idInitiative=${idInitiative},idParticipant=${participant.idParticipant})}">
+                                End Participation
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <h2 th:if="${participants.isEmpty()}" class="subtitle has-text-centered">No participants included</h2>
+                <div class="has-text-centered" th:if="*{isResponsible}">
+                    <a th:href="@{/participation-initiative/add/{idInitiative}(idInitiative=${initiative.idInitiative})}" class="button is-success is-rounded">
+                    <span class="icon is-small">
+                        <i class="fas fa-plus"></i>
+                    </span>
+                        <span>Add Participant</span>
+                    </a>
+                </div>
+            </div>
+            <div th:if="*{isRequests}">
+                <h2 class="subtitle has-text-weight-bold">Participant Requests</h2>
+                <table th:unless="${participants.isEmpty()}" class="table is-hoverable is-fullwidth">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Status</th>
+                        <th th:if="${isResponsible}">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="participant : ${participants}">
+                        <td th:text="${participant.name}"></td>
+                        <td th:text="${participant.type}"></td>
+                        <td th:text="${participant.status}"></td>
+                        <td th:if="${isResponsible}">
+                            <a class="button is-rounded is-warning" th:href="@{/participation-initiative/accept/{idInitiative}/{idParticipant}(idInitiative=${idInitiative},idParticipant=${participant.idParticipant})}">
+                                Accept participation
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <h2 th:if="${participants.isEmpty()}" class="subtitle has-text-centered">No requests</h2>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

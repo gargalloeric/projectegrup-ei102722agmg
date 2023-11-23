@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/base}">
+<head>
+    <title>Add new Initiative</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+</head>
+<body>
+<section class="section" layout:fragment="content">
+    <nav class="breadcrumb" aria-label="breadcrumbs">
+        <ul>
+            <li><a th:href="@{/}" href="#">Home</a></li>
+            <li><a th:href="@{/initiative/list}" href="#">Initiatives</a></li>
+            <li><a th:href="@{/initiative/add}" href="#">Create</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <h1 class="title">New Initiative</h1>
+        <form action="#" th:action="@{/initiative/add}"
+              th:object="${initiative}" method="post">
+            <div class="field">
+                <label class="label">Name</label>
+                <div class="control">
+                    <input th:class="${#fields.hasErrors('name')} ? 'input is-danger' : 'input'" type="text" th:field="*{name}" />
+                </div>
+                <p class="help is-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
+            </div>
+            <div class="field">
+                <label class="label">SDG</label>
+                <div class="control">
+                    <div th:class="${#fields.hasErrors('idSdg')} ? 'select is-danger' : 'select'">
+                        <select th:field="*{idSdg}">
+                            <option th:each="sdg : ${sdgs}"
+                                    th:value="${sdg.idSdg}"
+                                    th:text="${sdg.name}">
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <p class="help is-danger" th:if="${#fields.hasErrors('idSdg')}" th:errors="*{idSdg}"></p>
+            </div>
+            <div class="field">
+                <label class="label">Objective</label>
+                <div class="control">
+                    <div th:class="${#fields.hasErrors('classification')} ? 'select is-danger' : 'select'">
+                        <select th:field="*{classification}">
+                            <option th:each="classification : ${classifications}"
+                                    th:value="${classification.name}"
+                                    th:text="${classification.name}">
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <p class="help is-danger" th:if="${#fields.hasErrors('classification')}" th:errors="*{classification}"></p>
+            </div>
+            <div class="field">
+                <label class="label">Start Date</label>
+                <div class="control">
+                    <input th:class="${#fields.hasErrors('startDate')} ? 'input is-danger' : 'input'" type="date" th:field="*{startDate}" />
+                </div>
+                <p class="help is-danger" th:if="${#fields.hasErrors('startDate')}" th:errors="*{startDate}"></p>
+            </div>
+            <div class="field">
+                <label class="label">End Date</label>
+                <div class="control">
+                    <input th:class="${#fields.hasErrors('endDate')} ? 'input is-danger' : 'input'" type="date" th:field="*{endDate}" />
+                </div>
+                <p class="help is-danger" th:if="${#fields.hasErrors('endDate')}" th:errors="*{endDate}"></p>
+            </div>
+            <div class="field">
+                <label class="label">Description</label>
+                <div class="control">
+                    <textarea th:class="${#fields.hasErrors('description')} ? 'textarea is-danger' : 'textarea'" th:field="*{description}"></textarea>
+                </div>
+                <p class="help is-danger" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></p>
+            </div>
+            <div class="field">
+                <label class="label">Add Participants</label>
+                <h2 class="subtitle" th:unless="${participants}">No participants yet!</h2>
+                <div class="field is-grouped is-grouped-multiline" th:if="${participants}">
+                    <div class="control" th:each="participant :${participants}">
+                        <div class="tags has-addons">
+                            <span class="tag is-dark">
+                                <i class="fas fa-user"></i>
+                            </span>
+                            <span class="tag is-info" th:text="${participant.name}"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="control">
+                    <button th:formaction="@{/participation-initiative/add/creation}" class="button is-link is-rounded">
+                        <span class="icon is-small">
+                            <i class="fas fa-plus"></i>
+                        </span>
+                        <span>Edit participants</span>
+                    </button>
+                </div>
+            </div>
+            <div class="field">
+                <label class="label">Add actions</label>
+                <h2 class="subtitle" th:unless="${actions}">No actions yet!</h2>
+                <div class="field is-grouped is-grouped-multiline" th:if="${actions}">
+                    <div class="control" th:each="action :${actions}">
+                        <div class="tags has-addons">
+                            <span class="tag is-dark">
+                                <i class="fas fa-bolt"></i>
+                            </span>
+                            <span class="tag is-info" th:text="${action.name}"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="control">
+                    <button th:formaction="@{/action/add/creation}" class="button is-link is-rounded">
+                        <span class="icon is-small">
+                            <i class="fas fa-plus"></i>
+                        </span>
+                        <span>Add actions</span>
+                    </button>
+                </div>
+            </div>
+            <div class="field">
+                <div class="control">
+                    <input type="text" th:field="*{status}" hidden />
+                </div>
+            </div>
+            <div class="field">
+                <div class="control">
+                    <input type="date" th:field="*{lastModified}" hidden />
+                </div>
+            </div>
+            <div class="field">
+                <div class="control">
+                    <input type="number" th:field="*{idUjiParticipant}" hidden />
+                </div>
+            </div>
+            <div class="field">
+                <div class="control">
+                    <button class="button is-success is-rounded">Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
+</body>
+</html>

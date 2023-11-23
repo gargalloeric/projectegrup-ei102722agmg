@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{fragments/base}">
+<head>
+    <meta charset="UTF-8">
+    <title>Details</title>
+</head>
+<body>
+<section class="section" layout:fragment="content">
+    <nav class="breadcrumb" aria-label="breadcrumbs">
+        <ul>
+            <li><a th:href="@{/}" href="#">Home</a></li>
+            <li><a th:href="@{/user/details/feed}" href="#">Profile</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <h1 class="title" th:text="${user.getName()}"></h1>
+        <div class="block">
+            <h2 class="subtitle">Email: <span th:text="${user.getEmailAddress()}"></span></h2>
+            <h2 class="subtitle">Type: <span th:text="${user.getType()}"></span></h2>
+        </div>
+    </div>
+    <div class="container mt-5">
+        <div class="tabs is-toggle">
+            <ul>
+                <li th:class="${isFeed} ? 'is-active' : ''">
+                    <a th:href="@{/user/details/feed}">
+                        <span class="icon is-small"><i class="fas fa-rss" aria-hidden="true"></i></span>
+                        <span>Feed</span>
+                    </a>
+                </li>
+                <li th:class="${isInitiative} ? 'is-active' : ''">
+                    <a th:href="@{/user/details/initiatives}">
+                        <span class="icon is-small"><i class="fas fa-file-contract" aria-hidden="true"></i></span>
+                        <span>My Initiatives</span>
+                    </a>
+                </li>
+                <li th:class="${isSubscription} ? 'is-active' : ''">
+                    <a th:href="@{/user/details/subscriptions}">
+                        <span class="icon is-small"><i class="fas fa-star" aria-hidden="true"></i></span>
+                        <span>My Subscriptions</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <article class="message is-success" th:if="${success}">
+            <div class="message-body" th:text="${success}"></div>
+        </article>
+        <div th:if="${isInitiative}">
+            <h2 th:class="subtitle">My Initiatives</h2>
+            <h2 th:if="${initiativesFromUser.isEmpty()}" class="subtitle has-text-centered">You don't have any proposed initiatives yet.</h2>
+            <table th:unless="${initiativesFromUser.isEmpty()}" class="table is-hoverable is-fullwidth">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Status</th>
+                    <th>Last Modified</th>
+                    <th>Classification</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="initiative: ${initiativesFromUser}">
+                    <td th:text="${initiative.name}"></td>
+                    <td th:text="${initiative.status}"></td>
+                    <td th:text="${{initiative.lastModified}}"></td>
+                    <td th:text="${initiative.classification}"></td>
+                    <td>
+                        <a class="button is-link is-light is-rounded" th:href="@{/initiative/details/{id}/actions(id=${initiative.getIdInitiative()})}">
+                            <span class="icon is-small">
+                                <i class="fas fa-eye"></i>
+                            </span>
+                            <span>View</span>
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="has-text-centered">
+                <a th:href="@{/initiative/add}" class="button is-success is-rounded">
+                    <span class="icon is-small">
+                        <i class="fas fa-plus"></i>
+                    </span>
+                    <span>Add Initiative</span>
+                </a>
+            </div>
+        </div>
+        <div th:if="${isSubscription}">
+            <h2 th:class="subtitle">My Subscriptions</h2>
+            <h2 th:if="${userSubscriptions.isEmpty()}" class="subtitle has-text-centered">You don't have any subscriptions yet.</h2>
+            <table th:unless="${userSubscriptions.isEmpty()}" class="table is-hoverable is-fullwidth">
+                <thead>
+                <tr>
+                    <th>SDG</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="subscription: ${userSubscriptions}">
+                    <td th:text="${subscription.name}"></td>
+                    <td th:text="${subscription.startDate}"></td>
+                    <td th:if="${subscription.endDate == null}">---------</td>
+                    <td th:unless="${subscription.endDate == null}" th:text="${subscription.endDate}"></td>
+                    <td th:if="${subscription.endDate == null}">
+                        <a class="button is-link is-warning is-rounded" th:href="@{/subscription/end/{idSdg}/{idParticipant}(idSdg=${subscription.getIdSdg()},idParticipant=${subscription.getIdParticipant()})}">
+                            <span>End Subscription</span>
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="has-text-centered">
+                <a th:href="@{/subscription/add}" class="button is-success is-rounded">
+                    <span class="icon is-small">
+                        <i class="fas fa-plus"></i>
+                    </span>
+                    <span>Add Subscription</span>
+                </a>
+            </div>
+        </div>
+        <div th:if="${isFeed}">
+            <h2 th:class="subtitle">My Feed</h2>
+            <h2 th:if="${initiativesFeed.isEmpty()}" class="subtitle has-text-centered">Nothing to show.</h2>
+            <table th:unless="${initiativesFeed.isEmpty()}" class="table is-hoverable is-fullwidth">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Status</th>
+                    <th>Last Modified</th>
+                    <th>Classification</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="initiative: ${initiativesFeed}">
+                    <td th:text="${initiative.name}"></td>
+                    <td th:text="${initiative.status}"></td>
+                    <td th:text="${{initiative.lastModified}}"></td>
+                    <td th:text="${initiative.classification}"></td>
+                    <td>
+                        <a class="button is-link is-light is-rounded" th:href="@{/initiative/details/{id}/actions(id=${initiative.getIdInitiative()})}">
+                            <span class="icon is-small">
+                                <i class="fas fa-eye"></i>
+                            </span>
+                            <span>View</span>
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+</body>
+</html>
